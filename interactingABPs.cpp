@@ -356,7 +356,7 @@ int main(int argc, char *argv[])
 	double Pe=30, alpha=0.2, F0=100, LX=100, LY=400;
 	//Numerical parameters (dt=integration time-step, teq=equilibration time, tmax=maximal time, Npart=number of particles, init=initial condition, RAN=index of RNG).
 	//init=0: initial random height in the box, init=1: random height chosen with a sedimented profile such that p(y)=exp(-y/lsed).
-	double dt=0.001, teq=100, tmax=1000;
+	double dt=0.001, teq=5000, tmax=10000;
 	int Npart=5000, init=1, RAN=0;
 	
 	//Read the parameters taken in argument.
