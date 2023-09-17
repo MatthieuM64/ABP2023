@@ -79,13 +79,13 @@ PX=proba(x,y,0)*dtheta;
 PY=0.;
 for (real i=1;i<NN;i+=1)
 {
-	RHO+=proba(x,y,i*dtheta)*dtheta;
-	PX+=cos(i*dtheta)*proba(x,y,i*dtheta)*dtheta;
-	PY+=sin(i*dtheta)*proba(x,y,i*dtheta)*dtheta;
+	RHO=RHO+proba(x,y,i*dtheta)*dtheta;
+	PX=PX+cos(i*dtheta)*proba(x,y,i*dtheta)*dtheta;
+	PY=PY+sin(i*dtheta)*proba(x,y,i*dtheta)*dtheta;
 }
 
 cout << "---DENSITY PROFILE CALCULATED--- -ctime=" << int(clock()-cpu) << "s" << endl;
-cout << "N/V=" << 2*pi*int3d(Th)(rho)/int3d(Th)(1.) << " DRHO=" << RHO[].max-RHO[].min << " -ctime=" << int(clock()-cpu) << "s" << endl;
+cout << "N/V=" << 2*pi*int3d(Th)(proba)/int3d(Th)(1.) << " DRHO=" << RHO[].max-RHO[].min << " -ctime=" << int(clock()-cpu) << "s" << endl;
 
 //////////////////
 /// DATA FILES ///
