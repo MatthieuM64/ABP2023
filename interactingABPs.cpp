@@ -38,7 +38,7 @@ class particle
 	
 	particle(const int &index_, const double &lsed, const double &sigma, const double &LX, const double &LY, const int &init);
 	void updateTheta(const double &Ddt);
-	void updatePos(const double &alpha, const double &F0, const double &LX, const double &LY, const double &dt);
+	void updatePosition(const double &alpha, const double &F0, const double &LX, const double &LY, const double &dt);
 };
 
 //Initial condition.
@@ -76,7 +76,7 @@ void particle::updateTheta(const double &Ddt)
 }
 
 //Update the position of the particle.
-void particle::updatePos(const double &alpha, const double &F0, const double &LX, const double &LY, const double &dt)
+void particle::updatePosition(const double &alpha, const double &F0, const double &LX, const double &LY, const double &dt)
 {
 	//Wall-particle interaction.
 	static const double r0=pow(2,1./6)*a;
@@ -447,7 +447,7 @@ int main(int argc, char *argv[])
 		//Update the position of particles.
 		for(int k=0;k<Npart;k++)
 		{
-			ABP[k].updatePos(alpha,F0,LX,LY,dt);
+			ABP[k].updatePosition(alpha,F0,LX,LY,dt);
 		}
 	}
 	
