@@ -1,0 +1,118 @@
+/*CODE IMPLEMENTED WITH FreeFem++ (documentation and free software available on https://freefem.org/)
+  SEDIMENTATION OF IDEAL ACTIVE BROWNIAN PARTICLES IN A BOX - BY M. MANGEAT (2023)*/
+
+include "getARGV.idp" //Include parameters in command line.
+load "MUMPS" //Load a solver with less errors.
+load "msh3" //Load 3d mesh.
+
+//////////////////////////////
+/// PARAMETERS OF THE CODE ///
+//////////////////////////////
+
+//CPU clock time.
+real cpu=clock();
+
+//Physical parameters (Dt=translational diffusivity, Dr=rotational diffusion, vp=self-propulsion velocity, vg=gravitational velocity, LX,LY=size of the box).
+real Dt=1., Dr=1.;
+real vp=getARGV("-vp",2.);
+real vg=getARGV("-vg",0.5);
+real LX=getARGV("-LX",20.);
+real LY=getARGV("-LY",20.);
+
+//Numerical parameters (Nx,Ny,Nt=number of vertices on boundaries).
+int Nx=getARGV("-Nx",500);
+int Ny=getARGV("-Ny",500);
+int Nt=getARGV("-Nt",16);
+
+//////////////////////////////
+/// CREATION OF THE DOMAIN ///
+//////////////////////////////
+
+//Definition of the 2d mesh.
+mesh Th2=square(Nx,Ny,[(-0.5+x)*LX,y*LY]);
+cout << "---2D MESH CREATED--- -ctime=" << int(clock()-cpu) << "s" << endl;
+
+//Extrusion in the direction of theta = orientation of particles.
+int[int] reg=[0,0]; //2d region  0-> 3d region  0.
+int[int] rmid=[1,1, 2,1, 3,1, 4,1]; //2d label 1 -> 3d label 1 // 2d label 2 -> 3d label 1 // 2d label 3 -> 3d label 1 // 2d label 4 -> 3d label 1.
+int[int] rup=[0,2]; //upper face  2d region 0 -> 3d label 2.
+int[int] rdown=[0,3]; //lower face  2d region 0 -> 3d label 3.
+
+//Definition of the 3d mesh.
+mesh3 Th=buildlayers(Th2,Nt,zbound=[0,2*pi],region=reg,labelmid=rmid,labelup=rup,labeldown=rdown);
+cout << "---3D MESH CREATED--- -ctime=" << int(clock()-cpu) << "s" << endl;	
+
+//Creation of 2d and 3d vectorial spaces.
+fespace Ph(Th2,P1);
+fespace Vh(Th,P1,periodic=[[2,x,y],[3,x,y]]);
+
+///////////////////////////////
+/// EQUATION OF THE PROBLEM ///
+///////////////////////////////
+
+//Functions defined on 3d mesh (piecewise linear).
+Vh proba,v;
+
+//Definition of coupled equations with Neumann BC: Bilinear term (translational diffusion + self-propulsion + rotational diffusion) + Linear term (zero!).
+solve dABP(proba,v,solver=sparsesolver) = int3d(Th)( (Dt*dx(proba)-vp*cos(z)*proba)*dx(v) + (Dt*dy(proba) - (vp*sin(z)-vg)*proba)*dy(v) + Dr*dz(proba)*dz(v)) + int3d(Th)(-0.0001*v);
+
+//Normalized probability density.
+real norm=2*pi*int3d(Th)(proba)/int3d(Th)(1.);
+proba=proba/norm;
+
+cout << "---SYSTEM SOLVED--- -ctime=" << int(clock()-cpu) << "s" << endl;
+
+
+////////////////////////////////
+/// DENSITY AND POLARIZATION ///
+////////////////////////////////
+
+//Functions defined on 2d mesh (piecewise linear).
+Ph RHO,PX,PY;
+
+int NN=2*Nt+1;
+real dtheta=2*pi/NN;
+
+//Calculation of integrals using periodicity.
+RHO=proba(x,y,0)*dtheta;
+PX=proba(x,y,0)*dtheta;
+PY=0.;
+for (real i=1;i<NN;i+=1)
+{
+	RHO+=proba(x,y,i*dtheta)*dtheta;
+	PX+=cos(i*dtheta)*proba(x,y,i*dtheta)*dtheta;
+	PY+=sin(i*dtheta)*proba(x,y,i*dtheta)*dtheta;
+}
+
+cout << "---DENSITY PROFILE CALCULATED--- -ctime=" << int(clock()-cpu) << "s" << endl;
+cout << "N/V=" << 2*pi*int3d(Th)(rho)/int3d(Th)(1.) << " DRHO=" << RHO[].max-RHO[].min << " -ctime=" << int(clock()-cpu) << "s" << endl;
+
+//////////////////
+/// DATA FILES ///
+//////////////////
+
+system("mkdir -p data_ABP2d_ideal/");
+
+//Export density and polarization.
+int Nexp=501;
+ofstream fileRHO("data_ABP2d_ideal/ABP2d_ideal_rho_vp="+vp+"_vg="+vg+"_LX="+LX+"_LY="+LY+".txt");
+ofstream filePX("data_ABP2d_ideal/ABP2d_ideal_px_vp="+vp+"_vg="+vg+"_LX="+LX+"_LY="+LY+".txt");
+ofstream filePY("data_ABP2d_ideal/ABP2d_ideal_py_vp="+vp+"_vg="+vg+"_LX="+LX+"_LY="+LY+".txt");
+fileRHO.precision(6);
+filePX.precision(6);
+filePY.precision(6);
+
+for (real Y=0.;Y<LY+0.5*LY/Nexp;Y+=LY/Nexp)
+{
+	for (real X=-LX/2.;X<LX/2.+0.5*LX/Nexp;X+=LX/Nexp)
+	{
+		fileRHO << RHO(X,Y) << " ";
+		filePX  << PX(X,Y) << " ";
+		filePY  << PY(X,Y) << " ";
+	}
+	fileRHO << endl;
+	filePX << endl;
+	filePY << endl;
+}
+
+cout << "---STATIONARY STATE EXPORTED--- -ctime=" << int(clock()-cpu) << "s" << endl;
