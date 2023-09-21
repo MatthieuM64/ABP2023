@@ -1,7 +1,8 @@
 # ABP2023
 Sedimention of active Brownian particles (ABPs) in a box
 
-Codes used in the scientific publications (unpublished).
+Codes used in the scientific publications:</br>
+M. Mangeat, S. Chakraborty, A. Wysocki, and H. Rieger, Stationary particle currents in sedimenting active matter wetting a wall, submitted (2023). Preprint available on arXiv: https://arxiv.org/abs/2309.09714.
 
 <b>Interacting ABPs</b></br>
 C++ code on the sedimention of interacting active Brownian particles in a box.</br>
