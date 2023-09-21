@@ -12,7 +12,7 @@ Run: ./interactingABPs.out -parameter=value.</br>
 List of parameters: Pe, alpha, F0, LX, LY, init, RAN, dt, teq, tmax, Npart (details as comments in the code).
 
 <b>Ideal ABPs</b></br>
-FreeFem++ code (https://freefem.org/).</br>
+FreeFem++ code (https://freefem.org/) on the sedimention of non-interacting active Brownian particles in a box.</br>
 Exportations: steady state density and polarization.</br>
 Run: FreeFem++ -v 0 -nw idealABPs.edp -parameter value.</br>
 List of parameters: vp, vg, LX, LY, Nx, Ny, Nt (details as comments in the code).
