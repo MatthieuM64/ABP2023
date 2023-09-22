@@ -34,7 +34,7 @@ F0=100
 LX=100
 LY=400
 init=1
-ran=0
+Nran=100
 N=5000
 
 xfig=-0.31*LX
@@ -53,8 +53,8 @@ for arg in sys.argv[1:]:
 		LY=float(arg[4:])
 	elif "-init=" in arg:
 		init=float(arg[6:])
-	elif "-ran=" in arg:
-		ran=float(arg[5:])
+	elif "-Nran=" in arg:
+		Nran=int(arg[6:])
 	else:
 		print("Bad Argument: ",arg)
 		sys.exit(1)
@@ -67,7 +67,6 @@ cmap=plt.get_cmap('jet')
 ### IMPORTATION OF DATA ###
 ###########################
 	
-Nran=100
 if not os.path.isfile('data_npz/ABP2d_intAv_Pe=%.8g_alpha=%.8g_F0=%.8g_LX=%.8g_LY=%.8g_init=%d.npz'%(Pe,alpha,F0,LX,LY,init)):
 	RHO=0
 	PX=0
