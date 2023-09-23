@@ -1,4 +1,5 @@
 # Sedimentation of active Brownian particles in a box
+<a href="https://dx.doi.org/10.5281/zenodo.8353561"><img src="https://zenodo.org/badge/399397571.svg" alt="DOI"></a>
 
 Codes used in the scientific publication:</br>
 M. Mangeat, S. Chakraborty, A. Wysocki, and H. Rieger, Stationary particle currents in sedimenting active matter wetting a wall, submitted (2023). Preprint available on <a href='https://arxiv.org/abs/2309.09714'>arXiv</a>.
