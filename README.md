@@ -1,4 +1,4 @@
-# Sedimentation of active Brownian particles in a box
+# Sedimentation of active Brownian particles
 <a href="https://dx.doi.org/10.5281/zenodo.8353561"><img src="https://zenodo.org/badge/399397571.svg" alt="DOI"></a>
 
 Codes used in the scientific publication:</br>
