@@ -7,7 +7,7 @@ M. Mangeat, S. Chakraborty, A. Wysocki, and H. Rieger, <i><a href='https://journ
 ## Interacting ABPs
 
 C++ code on the sedimentation of interacting active Brownian particles in a box.</br>
-Exportations: dynamics with Delta t = 1 between two datafiles, steady state density, polarization, and current.</br>
+Exportations: dynamics with Delta t = 1 between two datafiles, steady-state density, polarization, and current.</br>
 Compile: g++ interactingABPs.cpp -lgsl -lgslcblas -lm -O3 -s -o interactingABPs.out.</br>
 Run: ./interactingABPs.out -parameter=value.</br>
 List of parameters: Pe, alpha, F0, LX, LY, init, RAN, dt, teq, tmax, Npart (details as comments in the code).</br>
